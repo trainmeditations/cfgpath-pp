@@ -10,24 +10,28 @@
 #include "cfgpath.hpp"
 
 #include <stdexcept>
+#include <cstdlib>
 \
 #ifdef _WIN32
 #include <shlobj.h>
-#endif
-
-#ifdef __unix__
-#include <cstdlib>
+#include <direct.h>
 #endif
 
 string cfgpath::get_user_config_folder(const string& appname) {
     //Windows first, then Apple, then other *nixes
     string cfgPath;
 #ifdef WIN32
-    TCHAR _confPath[MAX_PATH];
-    if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, _confPath))) {
-        throw std::runtime_error("Unable to get path from system");
+    //using ansi windows for now
+    char _confPath[MAX_PATH];
+    if (!SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_APPDATA, NULL, 0, _confPath))) {
+        throw std::runtime_error("Unable to get standard config path from system");
     }
     cfgPath=_confPath;
+    cfgPath+= '\\';
+    cfgPath+=appname;
+    if (_mkdir(cfgPath.c_str()) != 0 && errno != EEXIST) {
+        throw std::runtime_error("Unable to create application config folder");
+    }
     cfgPath+= '\\';
 #elif defined(__APPLE__)
 #elif defined(__unix__)
