@@ -9,6 +9,7 @@
 #ifndef CFGPATH_HPP
 #define CFGPATH_HPP
 
+#include <string>
 
 
 #endif // CFGPATH_HPP
