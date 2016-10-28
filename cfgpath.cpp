@@ -15,6 +15,10 @@
 #include <shlobj.h>
 #endif
 
+#ifdef __unix__
+#include <cstdlib>
+#endif
+
 string cfgpath::get_user_config_folder(const string& appname) {
     //Windows first, then Apple, then other *nixes
     string cfgPath;
@@ -27,7 +31,9 @@ string cfgpath::get_user_config_folder(const string& appname) {
     cfgPath+= '\\';
 #elif defined(__APPLE__)
 #elif defined(__unix__)
-   cfgPath = "test";
+    //Follow XDG Specification
+    const char * _confHome = getenv("XDG_CONFIG_HOME");
+
 #else
 #endif
     return cfgPath;
