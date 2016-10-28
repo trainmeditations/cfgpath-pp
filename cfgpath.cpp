@@ -26,7 +26,8 @@ string cfgpath::get_user_config_folder(const string& appname) {
     cfgPath=_confPath;
     cfgPath+= '\\';
 #elif defined(__APPLE__)
-#elif defined(__UNIX__)
+#elif defined(__unix__)
+   cfgPath = "test";
 #else
 #endif
     return cfgPath;
