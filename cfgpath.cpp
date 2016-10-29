@@ -15,15 +15,17 @@
 #ifdef _WIN32
 #include <shlobj.h>
 #include <direct.h>
+const char _pathSep = '\\';
 #endif
 
 #ifdef __unix__
 #include <sys/stat.h>
+const char _pathSep = '/';
 #endif
 
-string cfgpath::get_user_config_folder(const string& appname) {
-    //Windows first, then Apple, then other *nixes
+string get_standard_config_path() {
     string cfgPath;
+    //Windows first, then Apple, then other *nixes
 #ifdef WIN32
     //using ansi windows for now
     //assume appdata directory exists
@@ -32,11 +34,6 @@ string cfgpath::get_user_config_folder(const string& appname) {
         throw std::runtime_error("Unable to get standard config path from system");
     }
     cfgPath=_confPath;
-    cfgPath+= '\\';
-    cfgPath+=appname;
-    if (_mkdir(cfgPath.c_str()) != 0 && errno != EEXIST) {
-        throw std::runtime_error("Unable to create application config folder");
-    }
     cfgPath+= '\\';
 #elif defined(__APPLE__)
 #elif defined(__unix__)
@@ -57,12 +54,28 @@ string cfgpath::get_user_config_folder(const string& appname) {
         cfgPath=_confHome;
     }
     cfgPath += '/';
-    cfgPath += appname;
-    if (mkdir(cfgPath.c_str(), 0700) != 0 && errno != EEXIST)
-        throw std::runtime_error("Unable to create application config directory");
-    cfgPath += '/';
 #else
     throw std::logic_error("Incompatible OS");
 #endif
+    return cfgPath;
+}
+
+bool createDirectoryIfNotExist(const string& path) {
+#ifdef WIN32
+    return (_mkdir(path.c_str()) == 0 || errno == EEXIST);
+#elif defined(__APPLE__)
+#elif defined(__unix__)
+    return (mkdir(path.c_str(), 0700) == 0 || errno == EEXIST)
+#else
+    throw std::logic_error("Incompatible OS");
+#endif
+}
+
+string cfgpath::get_user_config_folder(const string& appname) {
+    string cfgPath = get_standard_config_path();
+    cfgPath += appname;
+    if (!createDirectoryIfNotExist(cfgPath))
+        throw std::runtime_error("Unable to create application config directory");
+    cfgPath += _pathSep;
     return cfgPath;
 }
