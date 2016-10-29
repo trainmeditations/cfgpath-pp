@@ -52,7 +52,7 @@ string get_standard_config_path() {
         cfgPath << _confHome;
         cfgPath << _pathSep;
         cfgPath << ".config";
-        if (mkdir(cfgPath.c_str(), 0700) != 0 && errno != EEXIST)
+        if (mkdir(cfgPath.str().c_str(), 0700) != 0 && errno != EEXIST)
             throw std::runtime_error("Unable to create .config in user home");
     } else {
         cfgPath << _confHome;
@@ -69,7 +69,7 @@ bool createDirectoryIfNotExist(const string& path) {
     return (_mkdir(path.c_str()) == 0 || errno == EEXIST);
 #elif defined(__APPLE__)
 #elif defined(__unix__)
-    return (mkdir(path.c_str(), 0700) == 0 || errno == EEXIST)
+    return (mkdir(path.c_str(), 0700) == 0 || errno == EEXIST);
 #else
     throw std::logic_error("Incompatible OS");
 #endif
