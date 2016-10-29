@@ -40,8 +40,27 @@ namespace cfgpath {
  */
 string get_user_config_folder(const string& appname);
 
-
+/** Get an absolute path to a single configuration file, specific to this user.
+ *
+ * This function is useful for programs that need only a single configuration
+ * file.  The file is unique to the user account currently logged in.
+ *
+ * Output is typically:
+ *
+ *   Windows: C:\Users\jcitizen\AppData\Roaming\appname.ini
+ *   Linux: /home/jcitizen/.config/appname.conf
+ *   Mac: /Users/jcitizen/Library/Application Support/appname.conf
+ *
+ * @param appname
+ *   Short name of the application.  Avoid using spaces or version numbers, and
+ *   use lowercase if possible.
+ *
+ * @post The file may or may not exist.
+ * @post The folder holding the file is created if needed.
+ */
 string get_user_config_file(const string& appname);
+
+
 string get_user_cache_folder(const string& appname);
 string get_user_data_folder(const string& appname);
 }

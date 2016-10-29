@@ -71,11 +71,23 @@ bool createDirectoryIfNotExist(const string& path) {
 #endif
 }
 
+bool createFileIfNotExist(const string& path) {
+    return true;
+}
+
 string cfgpath::get_user_config_folder(const string& appname) {
     string cfgPath = get_standard_config_path();
     cfgPath += appname;
     if (!createDirectoryIfNotExist(cfgPath))
         throw std::runtime_error("Unable to create application config directory");
     cfgPath += _pathSep;
+    return cfgPath;
+}
+
+string cfgpath::get_user_config_file(const string& appname) {
+    string cfgPath = get_standard_config_path();
+    cfgPath += appname;
+    if (!createFileIfNotExist(cfgPath))
+        throw std::runtime_error("Unable to create application config file");
     return cfgPath;
 }
