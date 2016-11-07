@@ -27,6 +27,17 @@ const char _pathSep = '/';
 
 using std::stringstream;
 
+bool createDirectoryIfNotExist(const string& path) {
+#ifdef WIN32
+    return (_mkdir(path.c_str()) == 0 || errno == EEXIST);
+#elif defined(__APPLE__)
+#elif defined(__unix__)
+    return (mkdir(path.c_str(), 0700) == 0 || errno == EEXIST);
+#else
+    throw std::logic_error("Incompatible OS");
+#endif
+}
+
 string get_standard_config_path() {
     stringstream cfgPath;
     //Windows first, then Apple, then other *nixes
@@ -52,7 +63,7 @@ string get_standard_config_path() {
         cfgPath << _confHome;
         cfgPath << _pathSep;
         cfgPath << ".config";
-        if (mkdir(cfgPath.str().c_str(), 0700) != 0 && errno != EEXIST)
+        if (!createDirectoryIfNotExist(cfgPath.str()))
             throw std::runtime_error("Unable to create .config in user home");
     } else {
         cfgPath << _confHome;
@@ -62,17 +73,6 @@ string get_standard_config_path() {
     throw std::logic_error("Incompatible OS");
 #endif
     return cfgPath.str();
-}
-
-bool createDirectoryIfNotExist(const string& path) {
-#ifdef WIN32
-    return (_mkdir(path.c_str()) == 0 || errno == EEXIST);
-#elif defined(__APPLE__)
-#elif defined(__unix__)
-    return (mkdir(path.c_str(), 0700) == 0 || errno == EEXIST);
-#else
-    throw std::logic_error("Incompatible OS");
-#endif
 }
 
 bool createFileIfNotExist(const string& path) {
