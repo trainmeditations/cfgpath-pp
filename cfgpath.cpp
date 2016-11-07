@@ -13,7 +13,6 @@
 #include <stdexcept>
 #include <cstdlib>
 
-\
 #ifdef _WIN32
 #include <shlobj.h>
 #include <direct.h>
