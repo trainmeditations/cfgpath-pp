@@ -103,6 +103,27 @@ string cfgpath::get_user_data_folder(const string& appname) {
     cfgPath << get_user_config_folder(appname);
 #elif defined(__APPLE__)
 #elif defined(__unix__)
+    //Follow XDG Specification
+    //Assume $XDG_DATA_HOME exists if it's set
+    //Assume $HOME exists if it's set
+    const char * _dataHome = getenv("XDG_DATA_HOME");
+    if (!_dataHome) {
+        //XDG_DATA_HOME isn't set. USE $HOME/.local/share
+        _dataHome = getenv("HOME");
+        if (!_dataHome) throw std::runtime_error("Unable to find home directory");
+        cfgPath << _dataHome << _pathSep << ".local";
+        if (!createDirectoryIfNotExist(cfgPath.str()))
+            throw std::runtime_error("Unable to create .local in user home");
+        cfgPath << _pathSep << "share";
+        if (!createDirectoryIfNotExist(cfgPath.str()))
+            throw std::runtime_error("Unable to create share in user home/.local");
+    } else {
+        cfgPath << _dataHome;
+    }
+    cfgPath << _pathSep << appname;
+    if (!createDirectoryIfNotExist(cfgPath.str()))
+        throw std::runtime_error("Unable to create application data directory");
+    cfgPath << _pathSep;
 #else
     throw std::logic_error("Incompatible OS");
 #endif
