@@ -89,7 +89,7 @@ string cfgpath::get_user_config_folder(const string& appname) {
     return cfgPath.str();
 }
 
-string cfgpath::get_user_config_file(const string& appname, const std::__cxx11::string &extension) {
+string cfgpath::get_user_config_file(const string& appname, const string& extension) {
     stringstream cfgPath;
     cfgPath << get_standard_config_path() << appname << extension;
     return cfgPath.str();
