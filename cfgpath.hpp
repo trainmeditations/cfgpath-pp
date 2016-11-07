@@ -62,8 +62,37 @@ string get_user_config_folder(const string& appname);
  */
 string get_user_config_file(const string& appname, const string& extension = defaultExt);
 
+/** Get an absolute path to a data storage folder, specific to this user.
+ *
+ * This function is useful for programs that need to store larger amounts of
+ * data specific to each user.  The output is a folder (which may not exist and
+ * will need to be created) suitable for storing a number of data files.
+ *
+ * This path should be used for persistent, important data files the user would
+ * want to keep.  Do not use this path for temporary files, cache files, or
+ * other files that can be recreated if they are deleted.  Use
+ * get_user_cache_folder() for those instead.
+ *
+ * The returned path will always end in a platform-specific trailing slash, so
+ * that a filename can simply be appended to the path.
+ *
+ * Output is typically:
+ *
+ *   Windows: C:\Users\jcitizen\AppData\Roaming\appname-data\
+ *   Linux: /home/jcitizen/.local/share/appname/
+ *   Mac: /Users/jcitizen/Library/Application Support/appname-data/
+ *
+ * @param appname
+ *   Short name of the application.  Avoid using spaces or version numbers, and
+ *   use lowercase if possible.
+ *
+ * @return
+ *   String containing the path
+ *
+ * @post The folder is created if needed.
+ */
+string get_user_data_folder(const string& appname);
 
 string get_user_cache_folder(const string& appname);
-string get_user_data_folder(const string& appname);
 }
 #endif // CFGPATH_HPP

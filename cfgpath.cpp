@@ -94,3 +94,17 @@ string cfgpath::get_user_config_file(const string& appname, const std::__cxx11::
     cfgPath << get_standard_config_path() << appname << extension;
     return cfgPath.str();
 }
+
+string cfgpath::get_user_data_folder(const string& appname) {
+    stringstream cfgPath;
+    //Windows first, then Apple, then other *nixes
+#ifdef WIN32
+    //same path as config
+    cfgPath << get_user_config_folder(appname);
+#elif defined(__APPLE__)
+#elif defined(__unix__)
+#else
+    throw std::logic_error("Incompatible OS");
+#endif
+    return cfgPath.str();
+}
