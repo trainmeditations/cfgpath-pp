@@ -14,6 +14,8 @@ using std::string;
 
 namespace cfgpath {
 
+    const string defaultExt = ".ini";
+
 /** Get an absolute path to a configuration folder, specific to this user.
  *
  * This function is useful for programs that need to store multiple
@@ -58,7 +60,7 @@ string get_user_config_folder(const string& appname);
  * @post The file may or may not exist.
  * @post The folder holding the file is created if needed.
  */
-string get_user_config_file(const string& appname);
+string get_user_config_file(const string& appname, const string& extension = defaultExt);
 
 
 string get_user_cache_folder(const string& appname);

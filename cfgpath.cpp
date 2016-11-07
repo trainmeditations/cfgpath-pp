@@ -89,11 +89,8 @@ string cfgpath::get_user_config_folder(const string& appname) {
     return cfgPath.str();
 }
 
-string cfgpath::get_user_config_file(const string& appname) {
+string cfgpath::get_user_config_file(const string& appname, const std::__cxx11::string &extension) {
     stringstream cfgPath;
-    cfgPath << get_standard_config_path();
-    cfgPath << appname;
-    if (!createFileIfNotExist(cfgPath.str()))
-        throw std::runtime_error("Unable to create application config file");
+    cfgPath << get_standard_config_path() << appname << extension;
     return cfgPath.str();
 }
