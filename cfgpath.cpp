@@ -21,6 +21,7 @@ const char _pathSep = '\\';
 
 #ifdef __unix__
 #include <sys/stat.h>
+#include <errno.h>
 const char _pathSep = '/';
 #endif
 
