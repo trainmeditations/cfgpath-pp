@@ -129,3 +129,27 @@ string cfgpath::get_user_data_folder(const string& appname) {
 #endif
     return cfgPath.str();
 }
+
+string cfgpath::get_user_cache_folder(const string& appname) {
+    stringstream cfgPath;
+    //Windows, Apple, other *nixes
+#ifdef WIN32
+    //using ansi windows for now
+    //assume appdata directory exists
+    char _cachePath[MAX_PATH];
+    if (!SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, _cachePath))) {
+        throw std::runtime_error("Unable to get standard config path from system");
+    }
+    cfgPath << _cachePath;
+    cfgPath << _pathSep;
+    cfgPath << appname;
+    if (!createDirectoryIfNotExist(cfgPath.str()))
+        throw std::runtime_error("Unable to create application cache directory");
+    cfgPath << _pathSep;
+#elif defined(__APPLE__)
+#elif defined(__unix__)
+#else
+    throw std::logic_error("Incompatible OS");
+#endif
+    return cfgPath.str();
+}
