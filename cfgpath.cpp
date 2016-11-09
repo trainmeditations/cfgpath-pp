@@ -148,6 +148,24 @@ string cfgpath::get_user_cache_folder(const string& appname) {
     cfgPath << _pathSep;
 #elif defined(__APPLE__)
 #elif defined(__unix__)
+    //Follow XDG Specification
+    //Assume $XDG_CACHE_HOME exists if it's set
+    //Assume $HOME exists if it's set
+    const char * _cacheHome = getenv("XDG_CACHE_HOME");
+    if (!_cacheHome) {
+        //XDG_CACHE_HOME isn't set. USE $HOME/.cache
+        _cacheHome = getenv("HOME");
+        if (!_cacheHome) throw std::runtime_error("Unable to find home directory");
+        cfgPath << _cacheHome << _pathSep << ".cache";
+        if (!createDirectoryIfNotExist(cfgPath.str()))
+            throw std::runtime_error("Unable to create .cache in user home");
+    } else {
+        cfgPath << _cacheHome;
+    }
+    cfgPath << _pathSep << appname;
+    if (!createDirectoryIfNotExist(cfgPath.str()))
+        throw std::runtime_error("Unable to create application cache directory");
+    cfgPath << _pathSep;
 #else
     throw std::logic_error("Incompatible OS");
 #endif
