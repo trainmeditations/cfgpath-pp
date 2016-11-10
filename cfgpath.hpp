@@ -29,7 +29,6 @@ namespace cfgpath {
  *
  *   Windows: C:\Users\jcitizen\AppData\Roaming\appname\
  *   Linux: /home/jcitizen/.config/appname/
- *   Mac: /Users/jcitizen/Library/Application Support/appname/
  *
  * @param appname
  *   Short name of the application.  Avoid using spaces or version numbers, and
@@ -51,7 +50,6 @@ string get_user_config_folder(const string& appname);
  *
  *   Windows: C:\Users\jcitizen\AppData\Roaming\appname.ini
  *   Linux: /home/jcitizen/.config/appname.conf
- *   Mac: /Users/jcitizen/Library/Application Support/appname.conf
  *
  * @param appname
  *   Short name of the application.  Avoid using spaces or version numbers, and
@@ -80,7 +78,6 @@ string get_user_config_file(const string& appname, const string& extension = def
  *
  *   Windows: C:\Users\jcitizen\AppData\Roaming\appname-data\
  *   Linux: /home/jcitizen/.local/share/appname/
- *   Mac: /Users/jcitizen/Library/Application Support/appname-data/
  *
  * @param appname
  *   Short name of the application.  Avoid using spaces or version numbers, and
@@ -113,7 +110,6 @@ string get_user_data_folder(const string& appname);
  *
  *   Windows: C:\Users\jcitizen\AppData\Local\appname\
  *   Linux: /home/jcitizen/.cache/appname/
- *   Mac: /Users/jcitizen/Library/Application Support/appname/
  *
  * @param appname
  *   Short name of the application.  Avoid using spaces or version numbers, and
