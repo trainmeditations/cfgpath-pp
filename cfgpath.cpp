@@ -30,7 +30,6 @@ using std::stringstream;
 bool createDirectoryIfNotExist(const string& path) {
 #ifdef WIN32
     return (_mkdir(path.c_str()) == 0 || errno == EEXIST);
-#elif defined(__APPLE__)
 #elif defined(__unix__)
     return (mkdir(path.c_str(), 0700) == 0 || errno == EEXIST);
 #else
@@ -40,7 +39,7 @@ bool createDirectoryIfNotExist(const string& path) {
 
 string get_standard_config_path() {
     stringstream cfgPath;
-    //Windows first, then Apple, then other *nixes
+    //Windows first, then *nixes
 #ifdef WIN32
     //using ansi windows for now
     //assume appdata directory exists
@@ -50,7 +49,6 @@ string get_standard_config_path() {
     }
     cfgPath<< _confPath;
     cfgPath<< _pathSep;
-#elif defined(__APPLE__)
 #elif defined(__unix__)
     //Follow XDG Specification
     //Assume $XDG_CONFIG_HOME exists if it's set
@@ -97,11 +95,10 @@ string cfgpath::get_user_config_file(const string& appname, const string& extens
 
 string cfgpath::get_user_data_folder(const string& appname) {
     stringstream cfgPath;
-    //Windows first, then Apple, then other *nixes
+    //Windows first, then *nixes
 #ifdef WIN32
     //same path as config
     cfgPath << get_user_config_folder(appname);
-#elif defined(__APPLE__)
 #elif defined(__unix__)
     //Follow XDG Specification
     //Assume $XDG_DATA_HOME exists if it's set
@@ -132,7 +129,7 @@ string cfgpath::get_user_data_folder(const string& appname) {
 
 string cfgpath::get_user_cache_folder(const string& appname) {
     stringstream cfgPath;
-    //Windows, Apple, other *nixes
+    //Windows, *nixes
 #ifdef WIN32
     //using ansi windows for now
     //assume appdata directory exists
@@ -146,7 +143,6 @@ string cfgpath::get_user_cache_folder(const string& appname) {
     if (!createDirectoryIfNotExist(cfgPath.str()))
         throw std::runtime_error("Unable to create application cache directory");
     cfgPath << _pathSep;
-#elif defined(__APPLE__)
 #elif defined(__unix__)
     //Follow XDG Specification
     //Assume $XDG_CACHE_HOME exists if it's set
